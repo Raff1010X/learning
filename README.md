@@ -5,7 +5,6 @@ git branch -M main
 git remote add origin https://github.com/Raff1010X/learning.git
 git push -u origin main
 
-
 git init  
 git pull https://github.com/Raff1010X/learning.git 
 git remote add origin https://github.com/Raff1010X/learning.git
@@ -20,7 +19,6 @@ git commit -a -m "sixth commit"
     OR
 git commit -m "second commit"
 git push -u origin main
-    OR master?
 
 
 git checkout <commit> <filename>
