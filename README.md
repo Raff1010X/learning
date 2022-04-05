@@ -12,3 +12,9 @@ git remote add origin https://github.com/Raff1010X/learning.git
 git add README.md
 git commit -m "second commit"
 git push -u origin master
+
+
+git commit -a
+press Esc
+type ":wq" (without quotes)
+Press Enter
