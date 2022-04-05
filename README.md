@@ -20,6 +20,7 @@ git commit -a -m "sixth commit"
     OR
 git commit -m "second commit"
 git push -u origin main
+    OR master?
 
 
 git checkout <commit> <filename>
