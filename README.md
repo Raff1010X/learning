@@ -13,8 +13,12 @@ git add README.md
 git commit -m "second commit"
 git push -u origin master
 
+git commit -a -m "sixth commit"
+    OR
+    git commit -a
+    press Esc
+    type ":wq" (without quote)
+    Press Enter
 
-git commit -a
-press Esc
-type ":wq" (without quotes)
-Press Enter
+
+
