@@ -94,6 +94,22 @@ userSchema.pre('save', async function (next) {
     next();
 });
 
+//+ If password has been changed, set the passwordChangedAt to the current time -1sec
+userSchema.pre('save', function (next) {
+    if (!this.isModified('password') || this.isNew) return next();
+
+    this.passwordChangedAt = Date.now() - 1000;
+
+    next();
+});
+
+//+ Hide inactive users from finding
+userSchema.pre(/^find/, function (next) {
+    this.find({ active: { $ne: false } });
+
+    next();
+});
+
 //+ Check if the password is correct
 userSchema.methods.correctPassword = async function (
     candidatePassword,
