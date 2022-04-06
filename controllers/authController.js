@@ -25,7 +25,7 @@ const createSendToken = (user, statusCode, req, res) => {
 
     // Remove password from output
     user.password = undefined;
-
+    console.log('user.password');
     res.status(statusCode).json({
         status: 'success',
         token,
@@ -44,15 +44,7 @@ exports.signup = catchAsync(async (req, res, next) => {
         passwordConfirm: req.body.passwordConfirm,
     });
 
-    const token = signToken(newUser._id);
-
-    res.status(201).json({
-        status: 'success',
-        token,
-        data: {
-            user: newUser,
-        },
-    });
+    createSendToken(newUser, 201, req, res);
 });
 
 //+ Login user
@@ -72,12 +64,7 @@ exports.login = catchAsync(async (req, res, next) => {
     }
 
     // 3) If everything ok, send token to client
-    const token = signToken(user._id);
-
-    res.status(200).json({
-        status: 'success',
-        token,
-    });
+    createSendToken(user, 200, req, res);
 });
 
 //+ Protected route
