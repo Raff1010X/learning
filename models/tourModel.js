@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 //const slugify = require('slugify');
 //const validator = require('validator');
+const User = require('./userModel');
 
 //+ Schema for tour model
 const tourSchema = new mongoose.Schema(
@@ -86,6 +87,33 @@ const tourSchema = new mongoose.Schema(
             default: false,
             select: false,
         },
+        startLocation: {
+            // GeoJSON
+            type: {
+                type: String,
+                default: 'Point',
+                enum: ['Point'],
+            },
+            coordinates: [Number],
+            address: String,
+            description: String,
+        },
+
+        guides: [
+            {
+                type: mongoose.Schema.ObjectId,
+                ref: 'User',
+                required: [true, 'A tour must have a guide'],
+                unique: true,
+                validate: {
+                    validator: async function (id) {
+                        const user = await User.findById(id);
+                        return user.role === 'guide';
+                    },
+                    message: 'The selected user is not a guide',
+                },
+            },
+        ],
     },
     {
         // virtual properties
@@ -97,6 +125,13 @@ const tourSchema = new mongoose.Schema(
 // virtual properties - not a part of database - not to use with a query - on get request
 tourSchema.virtual('durationWeeks').get(function () {
     return this.duration / 7;
+});
+
+// Virtual populate
+tourSchema.virtual('reviews', {
+    ref: 'Review',
+    foreignField: 'tour',
+    localField: '_id',
 });
 
 // DOCUMENT MIDDLEWARE: runs before .save() and .create() - runs only on document
@@ -114,6 +149,14 @@ tourSchema.virtual('durationWeeks').get(function () {
 tourSchema.pre(/^find/, function (next) {
     this.find({ secretTour: { $ne: true } });
     this.start = Date.now();
+    next();
+});
+
+tourSchema.pre(/^find/, function (next) {
+    this.populate({
+        path: 'guides',
+        select: '-__v -passwordChangedAt',
+    });
     next();
 });
 

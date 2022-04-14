@@ -1,8 +1,11 @@
 const express = require('express');
 const tourController = require('../controllers/tourController');
 const authController = require('../controllers/authController');
+const reviweRouter = require('./reviewRoutes'); // nested routes
 
 const router = express.Router();
+
+router.use('/:tourId/reviews', reviweRouter); // nested routes
 
 //router.param('id', tourController.checkId);
 
